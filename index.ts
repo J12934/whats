@@ -1,27 +1,28 @@
 import { whatIs, SubResult, Categories } from './analyser/analyser';
 
-import * as colors from 'colors/safe';
+import { bgGreen, bgRed, bgYellow, bgBlue, bgCyan } from 'colors/safe';
 
 function additionalInformation(res: SubResult) {
   let text = '    ';
 
   if (res.confidence !== null) {
     if (res.confidence > 90) {
-      text += `${colors.bgGreen(` Confidence ${res.confidence}% `)}  `;
+      text += `${bgGreen(` Confidence ${res.confidence}% `)}  `;
     } else if (res.confidence < 50) {
-      text += `${colors.bgRed(` Confidence ${res.confidence}% `)}  `;
+      text += `${bgRed(` Confidence ${res.confidence}% `)}  `;
     } else {
-      text += `${colors.bgYellow(` Confidence ${res.confidence}% `)}  `;
+      text += `${bgYellow(` Confidence ${res.confidence}% `)}  `;
     }
   }
   if (res.version !== null) {
-    text += `${colors.bgCyan(` Version: ${res.version} `)}  `;
+    text += `${bgCyan(` Version: ${res.version} `)}  `;
   }
 
   return text;
 }
 
 async function main() {
+  const target = process.argv[2];
   console.log(`What is ${target}? 🤔`);
   console.log();
 
@@ -30,7 +31,7 @@ async function main() {
 
     if (res.application !== null) {
       console.log(
-        `That's a ${colors.bgBlue(res.application.name)} ${
+        `That's a ${bgBlue(res.application.name)} ${
           res.application.category === Categories.CMS ||
           res.application.category === Categories.STATIC_SITE_GENERATOR
             ? 'site'
@@ -39,13 +40,13 @@ async function main() {
       );
       if (res.server !== null) {
         console.log(
-          `Running on a ${colors.bgBlue(
+          `Running on a ${bgBlue(
             res.server.name
           )} server.${additionalInformation(res.server)}`
         );
         if (res.programmingLanguage !== null) {
           console.log(
-            `With ${colors.bgBlue(
+            `With ${bgBlue(
               res.programmingLanguage.name
             )} running on it.${additionalInformation(res.programmingLanguage)}`
           );
@@ -56,7 +57,7 @@ async function main() {
         console.log("Can't tell which server its running though...");
         if (res.programmingLanguage !== null) {
           console.log(
-            `But it's definitly running ${colors.bgBlue(
+            `But it's definitly running ${bgBlue(
               res.programmingLanguage.name
             )} on the server.${additionalInformation(res.programmingLanguage)}`
           );
@@ -72,13 +73,13 @@ async function main() {
         console.log(
           `But its ${
             res.server.confidence > 75 ? 'definity' : ''
-          } running on a ${colors.bgBlue(
-            res.server.name
-          )}.${additionalInformation(res.server)}`
+          } running on a ${bgBlue(res.server.name)}.${additionalInformation(
+            res.server
+          )}`
         );
         if (res.programmingLanguage !== null) {
           console.log(
-            `With ${colors.bgBlue(
+            `With ${bgBlue(
               res.programmingLanguage.name
             )} running on it.${additionalInformation(res.programmingLanguage)}`
           );
@@ -89,13 +90,22 @@ async function main() {
         console.log(`Also no idea about the server side language running.`);
         if (res.programmingLanguage !== null) {
           console.log(
-            `But it's definitly running ${colors.bgBlue(
+            `But it's definitly running ${bgBlue(
               res.programmingLanguage.name
             )} on the server.${additionalInformation(res.programmingLanguage)}`
           );
         } else {
           console.log(`Also no idea about the server side language running.`);
         }
+      }
+    }
+
+    console.log();
+    console.log();
+    if (res.conflictingPossibilities.length > 0) {
+      for (const option of res.conflictingPossibilities) {
+        //TODO
+        // Or maybe include conflicting infos directly under the matching section?
       }
     }
   } catch (error) {
@@ -105,7 +115,5 @@ async function main() {
     console.error(error);
   }
 }
-
-const target = process.argv[2];
 
 main();

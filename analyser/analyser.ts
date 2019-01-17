@@ -172,6 +172,9 @@ function findInApplication(
 }
 
 function applicationToSubResult(app: CleanedApplication): SubResult {
+  if (!app) {
+    return null;
+  }
   return {
     name: app.name,
     version: app.version,
@@ -182,7 +185,7 @@ function applicationToSubResult(app: CleanedApplication): SubResult {
 
 export function whatIs(url: string): Promise<Result> {
   return analyse(url).then(res => {
-    const [application, ...otherApplications] = findInApplication(
+    const [application = null, ...otherApplications] = findInApplication(
       res.applications,
       application => {
         return application.categories.some(category =>
@@ -191,13 +194,13 @@ export function whatIs(url: string): Promise<Result> {
       }
     );
 
-    const [server, ...otherServers] = findInApplication(
+    const [server = null, ...otherServers] = findInApplication(
       res.applications,
       application => application.categories.includes(Categories.WEB_SERVERS)
     );
 
     const [
-      programmingLanguage,
+      programmingLanguage = null,
       ...otherProgrammingLanguages
     ] = findInApplication(res.applications, application =>
       application.categories.includes(Categories.PROGRAMMING_LANGUAGES)

@@ -1,16 +1,15 @@
 {
-  "name": "generation",
+  "name": "core",
   "version": "1.0.0",
   "description": "",
-  "main": "gather_categories.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "axios": "^0.18.0",
-    "lodash": "^4.17.11"
+  "dependencies": {
+    "wappalyzer": "^5.6.3"
   }
 }

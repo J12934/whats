@@ -1,5 +1,7 @@
-const Wappalyzer = require('wappalyzer/driver');
-const Browser = require('wappalyzer/browsers/zombie');
+import Wappalyzer from 'wappalyzer/driver';
+import Browser from 'wappalyzer/browsers/zombie';
+
+import { Categories } from './generated/wappalyer';
 
 const options = {
   debug: false,
@@ -13,85 +15,21 @@ const options = {
   htmlMaxRows: 2000,
 };
 
-export enum Categories {
-  CMS = 1,
-  MESSAGE_BOARDS = 2,
-  DATABASE_MANAGERS = 3,
-  DOCUMENTATION_TOOLS = 4,
-  WIDGETS = 5,
-  ECOMMERCE = 6,
-  PHOTO_GALLERIES = 7,
-  WIKIS = 8,
-  HOSTING_PANELS = 9,
-  ANALYTICS = 10,
-  BLOGS = 11,
-  JAVASCRIPT_FRAMEWORKS = 12,
-  ISSUE_TRACKERS = 13,
-  VIDEO_PLAYERS = 14,
-  COMMENT_SYSTEMS = 15,
-  CAPTCHAS = 16,
-  FONT_SCRIPTS = 17,
-  WEB_FRAMEWORKS = 18,
-  MISCELLANEOUS = 19,
-  EDITORS = 20,
-  LMS = 21,
-  WEB_SERVERS = 22,
-  CACHE_TOOLS = 23,
-  RICH_TEXT_EDITORS = 24,
-  JAVASCRIPT_GRAPHICS = 25,
-  MOBILE_FRAMEWORKS = 26,
-  PROGRAMMING_LANGUAGES = 27,
-  OPERATING_SYSTEMS = 28,
-  SEARCH_ENGINES = 29,
-  WEB_MAIL = 30,
-  CDN = 31,
-  MARKETING_AUTOMATION = 32,
-  WEB_SERVER_EXTENSIONS = 33,
-  DATABASES = 34,
-  MAPS = 35,
-  ADVERTISING_NETWORKS = 36,
-  NETWORK_DEVICES = 37,
-  MEDIA_SERVERS = 38,
-  WEBCAMS = 39,
-  PAYMENT_PROCESSORS = 40,
-  TAG_MANAGERS = 41,
-  BUILD_CI_SYSTEMS = 42,
-  CONTROL_SYSTEMS = 43,
-  REMOTE_ACCESS = 44,
-  DEV_TOOLS = 45,
-  NETWORK_STORAGE = 46,
-  FEED_READERS = 47,
-  DOCUMENT_MANAGEMENT_SYSTEMS = 48,
-  LANDING_PAGE_BUILDERS = 49,
-  LIVE_CHAT = 50,
-  CRM = 51,
-  SEO = 52,
-  ACCOUNTING = 53,
-  CRYPTOMINER = 54,
-  STATIC_SITE_GENERATOR = 55,
-  USER_ONBOARDING = 56,
-  JAVASCRIPT_LIBRARIES = 57,
-  CONTAINERS = 58,
-  SAAS = 59,
-  PAAS = 60,
-  IAAS = 61,
-}
-
 export const STANDALONE_APPLICATION_CATEGORIES = [
   Categories.CMS,
-  Categories.DATABASE_MANAGERS,
-  Categories.ECOMMERCE,
-  Categories.WIKIS,
-  Categories.HOSTING_PANELS,
-  Categories.BLOGS,
-  Categories.ISSUE_TRACKERS,
+  Categories.DatabaseManagers,
+  Categories.Ecommerce,
+  Categories.Wikis,
+  Categories.HostingPanels,
+  Categories.Blogs,
+  Categories.IssueTrackers,
   Categories.LMS,
-  Categories.WEB_MAIL,
-  Categories.BUILD_CI_SYSTEMS,
-  Categories.CONTROL_SYSTEMS,
-  Categories.REMOTE_ACCESS,
+  Categories.WebMail,
+  Categories.BuildCISystems,
+  Categories.ControlSystems,
+  Categories.RemoteAccess,
   Categories.CRM,
-  Categories.STATIC_SITE_GENERATOR,
+  Categories.StaticSiteGenerator,
 ];
 
 interface UrlStatus {
@@ -143,7 +81,7 @@ function analyse(url: string): Promise<CleanedWappalyzerResult> {
           ...application,
           confidence: parseInt(application.confidence),
           categories: application.categories.map(category => {
-            return parseInt(Object.keys(category)[0]);
+            return Object.values(category)[0];
           }),
         };
       }),
@@ -196,14 +134,14 @@ export function whatIs(url: string): Promise<Result> {
 
     const [server = null, ...otherServers] = findInApplication(
       res.applications,
-      application => application.categories.includes(Categories.WEB_SERVERS)
+      application => application.categories.includes(Categories.WebServers)
     );
 
     const [
       programmingLanguage = null,
       ...otherProgrammingLanguages
     ] = findInApplication(res.applications, application =>
-      application.categories.includes(Categories.PROGRAMMING_LANGUAGES)
+      application.categories.includes(Categories.ProgrammingLanguages)
     );
 
     const others = res.applications
@@ -213,11 +151,11 @@ export function whatIs(url: string): Promise<Result> {
         );
       })
       .filter(
-        application => !application.categories.includes(Categories.WEB_SERVERS)
+        application => !application.categories.includes(Categories.WebServers)
       )
       .filter(
         application =>
-          !application.categories.includes(Categories.PROGRAMMING_LANGUAGES)
+          !application.categories.includes(Categories.ProgrammingLanguages)
       )
       .map(applicationToSubResult);
 
@@ -275,3 +213,5 @@ interface Result {
 }
 
 export default analyse;
+
+export { Categories } from './generated/wappalyer';

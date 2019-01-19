@@ -1,4 +1,4 @@
-import { whatIs, SubResult, Categories } from './analyser/analyser';
+import { whatIs, SubResult, Categories } from '../core/core';
 
 import { bgGreen, bgRed, bgYellow, bgBlue, bgCyan } from 'colors/safe';
 
@@ -33,7 +33,7 @@ async function main() {
       console.log(
         `That's a ${bgBlue(res.application.name)} ${
           res.application.category === Categories.CMS ||
-          res.application.category === Categories.STATIC_SITE_GENERATOR
+          res.application.category === Categories.StaticSiteGenerator
             ? 'site'
             : 'instance'
         }!${additionalInformation(res.application)}`
@@ -54,7 +54,7 @@ async function main() {
           console.log(`Unsure about the server side language used though...`);
         }
       } else {
-        console.log("Can't tell which server its running though...");
+        console.log("Can't tell what kind of server it's running on though...");
         if (res.programmingLanguage !== null) {
           console.log(
             `But it's definitly running ${bgBlue(

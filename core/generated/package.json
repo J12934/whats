@@ -1,0 +1,12 @@
+{
+  "name": "generated",
+  "version": "1.0.0",
+  "description": "Generates static typescript types for wappalyzer",
+  "main": "generate.js",
+  "keywords": [],
+  "author": "",
+  "license": "Apache2",
+  "devDependencies": {
+    "axios": "^0.18.0"
+  }
+}

@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "microbundle --entry cli.ts",
-    "dev": "microbundle watch --entry cli.ts --external colors"
+    "build": "microbundle --entry cli.ts --output dist",
+    "dev": "microbundle watch --entry cli.ts --output dist --external colors"
   },
   "keywords": [],
   "author": "",

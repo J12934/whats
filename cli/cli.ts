@@ -1,4 +1,4 @@
-import { whatIs, SubResult, Categories } from '../core/core';
+import { whatIs, SubResult, Categories } from '../core/dist/core';
 
 import { bgGreen, bgRed, bgYellow, bgBlue, bgCyan } from 'colors/safe';
 

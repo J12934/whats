@@ -4,7 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm run build:core && npm run build:cli",
+    "dev": "concurrently 'npm:dev:core' 'npm:dev:cli'",
+    "build:core": "cd ./core && npm run build",
+    "dev:core": "cd ./core && npm run dev",
+    "build:cli": "cd ./cli && npm run build",
+    "dev:cli": "cd ./core && npm run dev"
   },
   "repository": {
     "type": "git",

@@ -8,7 +8,7 @@ function categoryEnumBody(wappalyzer) {
     .map(({ name }) => {
       return { key: name.replace(/ /g, ''), name };
     })
-    .map(({ key, name }) => `  ${key} = "${name}",`)
+    .map(({ key, name }) => `  ${key}: "${name}",`)
     .join('\n');
 }
 
@@ -23,13 +23,13 @@ const main = async () => {
  * Do not manually edit this file.
  */
 
-export enum Categories {
+module.exports.Categories = {
 ${categoryEnumBody(wappalyzer)}
 }
 `;
 
-  truncateSync('wappalyer.ts');
-  writeFileSync('wappalyer.ts', file);
+  truncateSync('wappalyer.js');
+  writeFileSync('wappalyer.js', file);
 };
 
 main();

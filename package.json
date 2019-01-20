@@ -1,16 +1,10 @@
 {
-  "name": "whatIs",
+  "name": "what-is",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run build:core && npm run build:cli",
-    "dev": "concurrently 'npm:dev:core' 'npm:dev:cli'",
-    "build:core": "cd ./core && npm run build",
-    "dev:core": "cd ./core && npm run dev",
-    "build:cli": "cd ./cli && npm run build",
-    "dev:cli": "cd ./core && npm run dev"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -18,12 +12,9 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "Apache2",
   "bugs": {
     "url": "https://github.com/J12934/whatIs/issues"
   },
-  "homepage": "https://github.com/J12934/whatIs#readme",
-  "devDependencies": {
-    "@types/node": "^10.12.18"
-  }
+  "homepage": "https://github.com/J12934/whatIs#readme"
 }

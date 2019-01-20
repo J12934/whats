@@ -1,16 +1,16 @@
-import { whatIs, SubResult, Categories, Result } from '../core/dist/core';
+const { whatIs, Categories } = require('../core/core');
 
-import {
+const {
   bgGreen,
   bgRed,
   bgYellow,
   bgBlue,
   bgCyan,
   bgMagenta,
-} from 'colors/safe';
+} = require('colors/safe');
 const arg = require('arg');
 
-function additionalInformation(res: SubResult) {
+function additionalInformation(res) {
   let text = '    ';
 
   if (res.confidence !== null) {
@@ -29,7 +29,7 @@ function additionalInformation(res: SubResult) {
   return text;
 }
 
-function logSite(res: Result) {
+function logSite(res) {
   if (res.application !== null) {
     console.log(
       `That's a ${bgBlue(res.application.name)} ${
@@ -109,7 +109,7 @@ function logSite(res: Result) {
   }
 }
 
-function logConflictingOptions(options: SubResult[]) {
+function logConflictingOptions(options) {
   for (const option of options) {
     console.log(
       ` ↳ Could also be ${bgMagenta(option.name)} ${additionalInformation(
@@ -119,13 +119,7 @@ function logConflictingOptions(options: SubResult[]) {
   }
 }
 
-interface Arguments {
-  '--help'?: boolean;
-  '--version'?: boolean;
-  _: string[];
-}
-
-function version(): string {
+function version() {
   return require('../package.json')['version'];
 }
 
@@ -143,6 +137,8 @@ Arguments:
    Displays this message...
  * --version or -v
    Dispalys the version of this tool. BTW it's ${version()} 😉
+ * --json
+   Outputs the results as machine readable json.
 `;
 
 async function main() {
@@ -151,6 +147,7 @@ async function main() {
     '--version': Boolean,
     '-h': '--help',
     '-v': '--version',
+    '--json': Boolean,
   });
 
   if (args['--help'] && args['--help'] === true) {
@@ -175,14 +172,22 @@ async function main() {
   }
 
   try {
-    console.log(`What is ${target}? 🤔`);
-    console.log();
+    if (!args['--json']) {
+      console.log(`What is ${target}? 🤔`);
+      console.log();
+    }
 
     const res = await whatIs(target);
-    logSite(res);
+    if (args['--json']) {
+      console.log(JSON.stringify(res));
+    } else {
+      logSite(res);
+    }
+    process.exit(0);
   } catch (error) {
     console.error(`Failed to scan ${bgRed(target)}.`);
     console.error(`Is the site reachable?`);
+    process.exit(1);
   }
 }
 

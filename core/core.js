@@ -1,7 +1,7 @@
-import Wappalyzer from 'wappalyzer/driver';
-import Browser from 'wappalyzer/browsers/zombie';
+const Wappalyzer = require('wappalyzer/driver');
+const Browser = require('wappalyzer/browsers/zombie');
 
-import { Categories } from './generated/wappalyer';
+const { Categories } = require('./generated/wappalyer');
 
 const options = {
   debug: false,
@@ -15,7 +15,7 @@ const options = {
   htmlMaxRows: 2000,
 };
 
-export const STANDALONE_APPLICATION_CATEGORIES = [
+const STANDALONE_APPLICATION_CATEGORIES = [
   Categories.CMS,
   Categories.DatabaseManagers,
   Categories.Ecommerce,
@@ -32,48 +32,10 @@ export const STANDALONE_APPLICATION_CATEGORIES = [
   Categories.StaticSiteGenerator,
 ];
 
-interface UrlStatus {
-  status: Number;
-}
-
-interface Meta {
-  language: string;
-}
-
-interface Application {
-  name: string;
-  confidence: string;
-  version: string;
-  icon: string;
-  website: string;
-  categories: Array<Map<string, string>>;
-}
-
-interface WappalyzerResult {
-  urls: Map<string, UrlStatus>;
-  applications: Array<Application>;
-  meta: Meta;
-}
-
-interface CleanedApplication {
-  name: string;
-  confidence: Number;
-  version: string;
-  icon: string;
-  website: string;
-  categories: Array<Categories>;
-}
-
-interface CleanedWappalyzerResult {
-  urls: Map<string, UrlStatus>;
-  applications: Array<CleanedApplication>;
-  meta: Meta;
-}
-
-function analyse(url: string): Promise<CleanedWappalyzerResult> {
+function analyse(url) {
   const wappalyzer = new Wappalyzer(Browser, url, options);
 
-  return wappalyzer.analyze().then((json: WappalyzerResult) => {
+  return wappalyzer.analyze().then(json => {
     return {
       ...json,
       applications: json.applications.map(application => {
@@ -89,18 +51,13 @@ function analyse(url: string): Promise<CleanedWappalyzerResult> {
   });
 }
 
-type FindCallback = (application: CleanedApplication) => boolean;
-
 /**
  * Returns the most confident type.
  *
  * @param applications all types for the current site
  * @param callbackFunc function to determin if the argument matches the current desired kind.
  */
-function findInApplication(
-  applications: CleanedApplication[],
-  callbackFunc: FindCallback
-): SubResult[] {
+function findInApplication(applications, callbackFunc) {
   const filteredTypes = applications
     .filter(callbackFunc)
     .sort((a, b) => (a.confidence >= b.confidence ? 1 : -1))
@@ -109,7 +66,7 @@ function findInApplication(
   return filteredTypes;
 }
 
-function applicationToSubResult(app: CleanedApplication): SubResult {
+function applicationToSubResult(app) {
   if (!app) {
     return null;
   }
@@ -121,7 +78,7 @@ function applicationToSubResult(app: CleanedApplication): SubResult {
   };
 }
 
-export function whatIs(url: string): Promise<Result> {
+function whatIs(url) {
   return analyse(url).then(res => {
     const [application = null, ...otherApplications] = findInApplication(
       res.applications,
@@ -173,49 +130,5 @@ export function whatIs(url: string): Promise<Result> {
   });
 }
 
-export interface SubResult {
-  /**
-   * Result Value
-   * E.g nginx, jira, styled-components, etc.
-   */
-  name: string;
-  /**
-   * Version of the Results
-   */
-  version: string;
-  /**
-   * Confidence of the Result
-   */
-  confidence: Number;
-  /**
-   *
-   */
-  category: Categories;
-}
-
-export interface Result {
-  // A standalone application.
-  // E.g. a JIRA instance or something like phpmyadmin
-  application: SubResult;
-
-  // Webserver responsible for hosting the site
-  // E.g. Apache, Nginx
-  server: SubResult;
-
-  // server side programming language used
-  programmingLanguage: SubResult;
-
-  // In case other less confident types are found for application, server or programming languages they get put in this array
-  conflictingPossibilities: {
-    application: SubResult[];
-    server: SubResult[];
-    programmingLanguage: SubResult[];
-  };
-
-  // other types
-  others: SubResult[];
-}
-
-export default analyse;
-
-export { Categories } from './generated/wappalyer';
+module.exports.Categories = Categories;
+module.exports.whatIs = whatIs;

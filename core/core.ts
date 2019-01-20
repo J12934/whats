@@ -163,11 +163,11 @@ export function whatIs(url: string): Promise<Result> {
       application,
       server,
       programmingLanguage,
-      conflictingPossibilities: [
-        ...otherApplications,
-        ...otherServers,
-        ...otherProgrammingLanguages,
-      ],
+      conflictingPossibilities: {
+        application: otherApplications,
+        server: otherServers,
+        programmingLanguage: otherProgrammingLanguages,
+      },
       others: others,
     };
   });
@@ -193,7 +193,7 @@ export interface SubResult {
   category: Categories;
 }
 
-interface Result {
+export interface Result {
   // A standalone application.
   // E.g. a JIRA instance or something like phpmyadmin
   application: SubResult;
@@ -206,7 +206,11 @@ interface Result {
   programmingLanguage: SubResult;
 
   // In case other less confident types are found for application, server or programming languages they get put in this array
-  conflictingPossibilities: SubResult[];
+  conflictingPossibilities: {
+    application: SubResult[];
+    server: SubResult[];
+    programmingLanguage: SubResult[];
+  };
 
   // other types
   others: SubResult[];

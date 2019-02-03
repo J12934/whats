@@ -1,4 +1,5 @@
-const { whatIs, Categories } = require('../core/core');
+#!/usr/bin/env node
+const { whatIs, Categories } = require('@j12934/whatis-core');
 
 const {
   bgGreen,
@@ -94,7 +95,7 @@ function logSite(res) {
         console.log(`Unsure about the server side language used though...`);
       }
     } else {
-      console.log(`Also no idea about the server side language running.`);
+      console.log(`Also no idea about the type of server it's using.`);
       if (res.programmingLanguage !== null) {
         console.log(
           `But it's definitly running ${bgBlue(
@@ -107,12 +108,19 @@ function logSite(res) {
       }
     }
   }
+
+  if (res.others.length > 0) {
+    console.log(``);
+    const otherStuff = res.others.map(other => bgBlue(other.name)).join(' ');
+
+    console.log(`And some various other stuff: ${otherStuff}`);
+  }
 }
 
 function logConflictingOptions(options) {
   for (const option of options) {
     console.log(
-      ` ↳ Could also be ${bgMagenta(option.name)} ${additionalInformation(
+      ` ↳  Could also be ${bgMagenta(option.name)} ${additionalInformation(
         option
       )}`
     );
@@ -120,15 +128,15 @@ function logConflictingOptions(options) {
 }
 
 function version() {
-  return require('../package.json')['version'];
+  return require('./package.json')['version'];
 }
 
 const HELP_TEXT = `What is? 🤔
 
-Simple and fast identification of Web Services, build on Wappalyzer.
+Simple and fast identification of Web Services, build on top of Wappalyzer.
 
 Usage:
-$ whatis https://wiki.example.com
+$ whats https://wiki.example.com
 
 Arguments:
  * Default Argument: 
@@ -136,7 +144,7 @@ Arguments:
  * --help or -h
    Displays this message...
  * --version or -v
-   Dispalys the version of this tool. BTW it's ${version()} 😉
+   Dispalys the version of this tool. It's ${version()} btw 😉
  * --json
    Outputs the results as machine readable json.
 `;

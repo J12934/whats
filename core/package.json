@@ -1,11 +1,11 @@
 {
-  "name": "core",
+  "name": "@j12934/whatis-core",
   "version": "1.0.0",
   "description": "",
   "main": "core.js",
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "Apache2",
   "dependencies": {
     "wappalyzer": "^5.6.3"
   }

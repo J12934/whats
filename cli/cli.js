@@ -24,7 +24,7 @@ function additionalInformation(res) {
     }
   }
   if (res.version !== null) {
-    text += `${bgCyan(` Version: ${res.version} `)}  `;
+    text += `${bgCyan(` Version: ${res.version.trim()} `)}  `;
   }
 
   return text;
@@ -111,7 +111,9 @@ function logSite(res) {
 
   if (res.others.length > 0) {
     console.log(``);
-    const otherStuff = res.others.map(other => bgBlue(other.name)).join(' ');
+    const otherStuff = res.others
+      .map(other => bgBlue(other.name.trim()))
+      .join(' ');
 
     console.log(`And some various other stuff: ${otherStuff}`);
   }

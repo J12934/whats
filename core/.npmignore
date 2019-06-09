@@ -1,2 +1,2 @@
 generated/*
-generated/wappalyer.js
+!generated/wappalyer.js

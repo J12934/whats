@@ -1,7 +1,7 @@
 {
   "name": "@j12934/whatis",
   "description": "Simple and fast identification of Web Services, build on top of Wappalyzer",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "main": "cli.js",
   "keywords": [],
   "author": "Jannik Hollenbach",
@@ -10,7 +10,7 @@
     "whats": "./cli.js"
   },
   "dependencies": {
-    "@j12934/whatis-core": "^1.0.0",
+    "@j12934/whatis-core": "^1.0.3",
     "arg": "^4.1.0",
     "colors": "^1.3.3",
     "wappalyzer": "^5.8.2"
